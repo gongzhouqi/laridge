@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="ch">
+<head>
+    <title>ZG游戏平台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/commonCss.css">
+    <link rel="stylesheet" href="../css/roomCss.css">
+    <link rel="stylesheet" href="../css/hallCss.css">
+    <script src="../js/hallScript.js"></script>
+
+</head>
+<body>
+
+    <!--------------->
+    <!-- room page -->
+    <!--------------->
+    <div class="base-page-container" id="room-page">
+        <header class="fixed-top header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="main-header">
+                            <h3 id="header-room-name"></h3>
+                            <h3 id="header-game-name"></h3>
+                        </div>
+                    </div>
+                    <div class="col-md-1 ml-auto">
+                        <button type="button" class="close room-main-close" onclick="closeRoom()">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="room-main-page">
+            <table class="room-player-table">
+                <tr>
+                    <td>
+                        <div id="roomPlayer1"></div>
+                        <p id="roomPlayerName1"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer2"></div>
+                        <p id="roomPlayerName2"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer3"></div>
+                        <p id="roomPlayerName3"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer4"></div>
+                        <p id="roomPlayerName4"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="roomPlayer5"></div>
+                        <p id="roomPlayerName5"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer6"></div>
+                        <p id="roomPlayerName6"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer7"></div>
+                        <p id="roomPlayerName7"></p>
+                    </td>
+                    <td>
+                        <div id="roomPlayer8"></div>
+                        <p id="roomPlayerName8"></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <footer class="fixed-bottom footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 ml-auto">
+                        <button type="button" class="btn btn-success" onclick="gameStart()">
+                            开始游戏
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!---------------------->
+    <!-- end of room page -->
+    <!---------------------->
+    
+</body>
+</html>

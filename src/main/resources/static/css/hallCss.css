@@ -1,0 +1,34 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+.main-page {
+    width: 800px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.main-page td {
+    vertical-align: middle;
+}
+
+.hall-container {
+    height: 100%;
+    background-color: #e6ebf0;
+    overflow: auto;
+}
+
+.invalid-input {
+    border-color: red;
+}
+
+.hall-head-image {
+    border: 1px solid gray;
+    background-color: white;
+    margin-top: auto;
+    margin-bottom: 13px;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html lang="ch">
+<head>
+    <title>ZG游戏平台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/commonCss.css">
+    <link rel="stylesheet" href="../css/roomCss.css">
+    <link rel="stylesheet" href="../css/hallCss.css">
+    <link rel="stylesheet" href="../css/loadCss.css">
+    <script src="../js/commonScript.js"></script>
+    <script src="../js/roomScript.js"></script>
+    <script src="../js/hallScript.js"></script>
+    <script src="../js/gameScript.js"></script>
+    <script src="../js/loadScript.js"></script>
+
+</head>
+<body>
+    
+    <!------------>
+    <!-- modals -->
+    <!------------>
+    <div class="modal fade" id="RoomCreateModal" tabindex="-1" role="dialog" aria-labelledby="RoomCreateModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="RoomCreateModalTitle">创建房间</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="roomNameInput">房间名</label>
+                    <input type="text" class="form-control" id="roomNameInput" aria-describedby="roomNameHelp" placeholder="请输入房间名">
+                    <small id="roomNameHelp" class="form-text text-muted">只能包含中文，英文字母，数字。 不能包含特殊字符。</small>
+                    <label for="gameList">选择游戏</label>
+                    <select class="form-control" id="gameList">
+                        <option value="-1" disabled selected>--选择一项游戏--</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="createRoom()">创建</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ChangeNameModal" tabindex="-1" role="dialog" aria-labelledby="ChangeNameModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ChangeNameModalTitle">修改昵称</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="uNameInput" aria-describedby="uNameHelp">
+                    <small id="uNameHelp" class="form-text text-muted">只能包含中文，英文字母，数字。 不能包含特殊字符。</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="changeName()">修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ErrorLog" tabindex="-1" role="dialog" aria-labelledby="ErrorLogTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ErrorLogTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="ErrorLogContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!------------------->
+    <!-- end of modals -->
+    <!------------------->
+
+
+
+    <!--------------->
+    <!-- hall page -->
+    <!--------------->
+    <div class="base-page-container" id="hall-page">
+        <header class="fixed-top header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="main-header">
+                            <img alt="head image" id="headImage" class="hall-head-image">
+                            <h3 id="uName"></h3>
+                            <a href="#" data-toggle="modal" data-target="#ChangeNameModal">修改</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 ml-auto">
+                        <button type="button" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="刷新房间列表" onclick="updateRooms()">
+                            <span class="fa fa-refresh" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="main-page">
+            <div class="hall-container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="thead-dark">
+                            <th scope="col">房间名</th>
+                            <th scope="col">游戏</th>
+                            <th scope="col">人数</th>
+                            <th scope="col">房主</th>
+                            <th scope="col">加入</th>
+                        </tr>
+                    </thead>
+                    <tbody id = "roomListPlaceHolder">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="fixed-bottom footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 ml-auto">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#RoomCreateModal">
+                            创建房间
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!---------------------->
+    <!-- end of hall page -->
+    <!---------------------->
+
+
+
+    <!------------------>
+    <!-- loading page -->
+    <!------------------>
+    <div class="base-page-container load-page" id="load-page"></div>
+    <!------------------------->
+    <!-- end of loading page -->
+    <!------------------------->
+
+
+
+    <!--------------->
+    <!-- room page -->
+    <!--------------->
+    <div class="base-page-container" id="room-page" style="display: none;"></div>
+    <!---------------------->
+    <!-- end of room page -->
+    <!---------------------->
+
+
+
+    <!--------------->
+    <!-- game page -->
+    <!--------------->
+    <div class="base-page-container" id="game-page" style="display: none;"></div>
+    <!---------------------->
+    <!-- end of game page -->
+    <!---------------------->
+    
+</body>
+<script>
+    init();
+</script>
+</html>
