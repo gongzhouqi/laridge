@@ -90,6 +90,7 @@ public class HallCore extends Core {
     public void sendRoomBroadCast(String roomId, String username, String roomName, String gameId, int size, int ip, int port) {
         RoomBroadCastModel model = new RoomBroadCastModel(roomId, username, roomName, gameId, size, ip, port);
         send(model, WebConstants.BROADCAST_SUFFIX, HallServiceConstants.HALL_SERVICE_PORT);
+        send(model, WebConstants.BROADCAST_SUFFIX, 18080);
     }
 
     public void sendRoomCLose() {

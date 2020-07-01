@@ -19,7 +19,6 @@ public class HallController {
     @ResponseBody
     public String broadcastRoom() {
         User.getSingleton().broadcastRoom();
-        System.out.println("啊啊啊");
         return "广播了一次房间";
     }
 

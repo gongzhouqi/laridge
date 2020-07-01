@@ -14,6 +14,7 @@ import services2.server.RoomServerCore;
 import utils.NetUtil;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,9 +43,11 @@ public class User {
         }
         return singleton;
     }
-
     private User() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(DBConstants.USER_DB + "/info.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(DBConstants.USER_DB + "/info.txt"),
+                        StandardCharsets.UTF_8)
+        )) {
             this.username = reader.readLine();
             this.headId = Integer.parseInt(reader.readLine());
         } catch (IOException e) {
@@ -142,7 +145,7 @@ public class User {
         }
     }
 
-    public void waitOnRoom(RoomWaitModel waiter) {
+    public void waitOnRoom(SseEmitter waiter) {
         if (roomClient == null) {
             System.out.println("Room missing");
         } else {

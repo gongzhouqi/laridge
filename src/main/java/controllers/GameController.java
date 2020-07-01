@@ -1,16 +1,11 @@
 package controllers;
 
 import models.GameLoadModel;
-import models.GameWaitModel;
-import models.RoomWaitModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import user.User;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Controller
 public class GameController {
@@ -33,7 +28,8 @@ public class GameController {
     @GetMapping("/waitGameUpdate")
     @ResponseBody
     public SseEmitter gameStream() {
-        SseEmitter emitter = new SseEmitter(28000L);
+        // 10 hours
+        SseEmitter emitter = new SseEmitter(36000000L);
         User.getSingleton().waitOnGame(emitter);
         return emitter;
     }

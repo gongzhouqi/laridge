@@ -46,23 +46,24 @@ public class GameClientCore extends Core {
     public void process(Model model, int replyIP, int replyPort) {
         // TODO: Fix This
         if (model instanceof GameOperationModel) {
-            System.out.println(((GameOperationModel)model).getOperation());
             signalFrontEnd(((GameOperationModel)model).getOperation());
         }
     }
 
     private void signalFrontEnd(String message) {
-        SseEmitter.SseEventBuilder event = SseEmitter.event()
-            .data(message);
-        try {
-            waiter.send(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (waiter != null) {
+            SseEmitter.SseEventBuilder event = SseEmitter.event().data(message);
+            try {
+                waiter.send(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void waitOn(SseEmitter waiter) {
         this.waiter = waiter;
+        waiter.onCompletion(this::stopWait);
     }
 
     public void stopWait() {

@@ -4,9 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import constants.DBConstants;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,12 +15,17 @@ public class Games {
     static {
         Map<String, MetaData> temp;
         Gson g = new Gson();
-        try (FileReader fr = new FileReader(new File(DBConstants.GAME_DB + DBConstants.GAME_INFO))) {
-            temp = g.fromJson(fr, new TypeToken<Map<String, MetaData>>(){}.getType());
-        } catch (IOException e) {
-            e.printStackTrace();
-            temp = new HashMap<>();
-            // TODO: consume this
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(DBConstants.RESOURCE_GAME_DB + DBConstants.GAME_INFO);
+        if (is != null) {
+            temp = g.fromJson(new InputStreamReader(is), new TypeToken<Map<String, MetaData>>(){}.getType());
+        } else {
+            try (FileReader fr = new FileReader(new File(DBConstants.GAME_DB + DBConstants.GAME_INFO))) {
+                temp = g.fromJson(fr, new TypeToken<Map<String, MetaData>>(){}.getType());
+            } catch (IOException e) {
+                temp = new HashMap<>();
+                System.out.println("Failed to load resource.");
+            }
         }
         GAME_INFO = temp;
     }

@@ -3,10 +3,12 @@ package services2.client;
 import com.google.gson.Gson;
 import models.RoomAccessModel;
 import models.RoomWaitModel;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import services2.Core;
 import services2.models.*;
 import user.User;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,7 +24,7 @@ public class RoomClientCore extends Core {
 
     private RoomAccessModel rm;
 
-    private RoomWaitModel waiter;
+    private SseEmitter waiter;
 
     private RoomClientCore() {}
 
@@ -97,28 +99,23 @@ public class RoomClientCore extends Core {
     }
 
     private void signalFrontEnd(String message) {
-        if (isWaiting.get()) {
-            waiter.setResponse(message);
-            waiter.getLock().lock();
-            waiter.getWaitCondition().signal();
-            waiter.getLock().unlock();
+        if (waiter != null) {
+            SseEmitter.SseEventBuilder event = SseEmitter.event().data(message);
+            try {
+                waiter.send(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void waitOn(RoomWaitModel waiter) {
-        this.isWaiting.set(true);
+    public void waitOn(SseEmitter waiter) {
         this.waiter = waiter;
-        this.waiter.getLock().lock();
-        try {
-            while (waiter.getResponse() == null) {
-                this.waiter.getWaitCondition().await();
-            }
-        } catch (InterruptedException ignored) {
-        } finally {
-            this.waiter.getLock().unlock();
-            this.isWaiting.set(false);
-            this.waiter = null;
-        }
+        waiter.onCompletion(this::stopWait);
+    }
+
+    public void stopWait() {
+        waiter = null;
     }
 
 }

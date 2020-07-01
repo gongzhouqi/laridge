@@ -1,11 +1,11 @@
 package controllers;
 
 import models.RoomAccessModel;
-import models.RoomWaitModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import user.User;
 
 @Controller
@@ -34,9 +34,10 @@ public class RoomController {
 
     @GetMapping("/waitRoomUpdate")
     @ResponseBody
-    public String waitRoomUpdate() {
-        RoomWaitModel waiter = new RoomWaitModel();
-        User.getSingleton().waitOnRoom(waiter);
-        return waiter.getResponse();
+    public SseEmitter roomStream() {
+        // 10 hours
+        SseEmitter emitter = new SseEmitter(36000000L);
+        User.getSingleton().waitOnRoom(emitter);
+        return emitter;
     }
 }
