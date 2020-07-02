@@ -32,7 +32,7 @@ function createRoom() {
     }
 }
 
-function createGuestRoom(roomName, gameId) {
+function createGuestRoom(gameId, roomName) {
     createRoomLocal(roomName, gameId, false);
 }
 
