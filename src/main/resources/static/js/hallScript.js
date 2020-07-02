@@ -75,7 +75,7 @@ function updateRoomsLocal(currentRooms) {
 
         var c2 = document.createElement("td");
         var gameId = room.gameId;
-        c2.innerText = gameId;
+        c2.innerText = games[gameId].name;
 
         var c3 = document.createElement("td");
         var currUserNumber = room.userNumber;

@@ -79,7 +79,7 @@ public class RoomServerCore extends Core {
     public int getSize() {
         lock.lock();
         try {
-            return connectedUsers.size();
+            return (int) connectedUsers.stream().filter(OtherUser::isNormalUser).count();
         } finally {
             lock.unlock();
         }
