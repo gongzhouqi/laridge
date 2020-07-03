@@ -2,7 +2,7 @@ package services2.client;
 
 import games.GameProcessor;
 import games.Games;
-import models.GameWaitModel;
+import games.dummyGame.DummyProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import services2.Core;
 import services2.models.GameOperationModel;
@@ -27,13 +27,14 @@ public class GameClientCore extends Core {
     private GameClientCore (String gameId, int serverIP, int serverPort) {
         Games.MetaData info = Games.GAME_INFO.get(gameId);;
         try {
-            this.game = (GameProcessor) Class.forName(GAME_PACKAGE_PATH + info.getPkg() + GAME_PROCESSOR_NAME).getConstructor().newInstance();
+            this.game = (GameProcessor) Class.forName(GAME_PACKAGE_PATH + info.getPkg() + GAME_PROCESSOR_NAME)
+                    .getConstructor(getClass()).newInstance(this);
         } catch (InstantiationException
                 | InvocationTargetException
                 | NoSuchMethodException
                 | IllegalAccessException
                 | ClassNotFoundException e) {
-            this.game = new GameProcessor();
+            this.game = new DummyProcessor(this);
         }
         this.serverIP = serverIP;
         this.serverPort = serverPort;
@@ -42,12 +43,16 @@ public class GameClientCore extends Core {
     public static GameClientCore guestGame(String gameId, int serverIP, int serverPort) {
         return new GameClientCore(gameId, serverIP, serverPort);
     }
+
     @Override
     public void process(Model model, int replyIP, int replyPort) {
-        // TODO: Fix This
         if (model instanceof GameOperationModel) {
-            signalFrontEnd(((GameOperationModel)model).getOperation());
+            game.processServerOperation(((GameOperationModel)model).getOperation());
         }
+    }
+
+    public void showChange(String change) {
+        signalFrontEnd(change);
     }
 
     private void signalFrontEnd(String message) {
@@ -72,5 +77,9 @@ public class GameClientCore extends Core {
 
     public void tellReady() {
         send(new GameReadyModel(), serverIP, serverPort);
+    }
+
+    public void tellPlayerAction(String action) {
+        send(new GameOperationModel(action), serverIP, serverPort);
     }
 }

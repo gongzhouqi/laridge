@@ -161,6 +161,12 @@ public class User {
         }
     }
 
+    public void inputToGame(String input) {
+        if (gameClient != null) {
+            gameClient.tellPlayerAction(input);
+        }
+    }
+
     public void broadcastCloseRoom() {
         hallCore.sendRoomCLose();
     }

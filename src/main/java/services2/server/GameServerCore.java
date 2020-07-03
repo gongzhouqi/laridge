@@ -2,6 +2,7 @@ package services2.server;
 
 import games.GameCore;
 import games.Games;
+import games.dummyGame.DummyGame;
 import services2.Core;
 import services2.models.GameOperationModel;
 import services2.models.GameReadyModel;
@@ -10,7 +11,9 @@ import user.OtherUser;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static constants.GameConstants.*;
@@ -21,6 +24,8 @@ public class GameServerCore extends Core {
 
     private List<OtherUser> connectedUsers;
 
+    private Map<Integer, Integer> ipToNumber;
+
     private int playerNumber;
 
     private int readyPlayer;
@@ -29,22 +34,25 @@ public class GameServerCore extends Core {
 
     private GameServerCore(String gameId, List<OtherUser> connectedUsers) {
         Games.MetaData info = Games.GAME_INFO.get(gameId);
+        this.connectedUsers = new ArrayList<>();
+        this.ipToNumber = new HashMap<>();
+        for (OtherUser user : connectedUsers) {
+            if (user.isNormalUser()) {
+                this.ipToNumber.put(user.getSubIP(), this.connectedUsers.size());
+                this.connectedUsers.add(new OtherUser(user.getUsername(), user.getHeadId(), user.getSubIP(), user.getPort()));
+            }
+        }
+        this.playerNumber = this.connectedUsers.size();
         try {
-            this.game = (GameCore) Class.forName(GAME_PACKAGE_PATH + info.getPkg() + GAME_CLASS_NAME).getConstructor().newInstance();
+            this.game = (GameCore) Class.forName(GAME_PACKAGE_PATH + info.getPkg() + GAME_CLASS_NAME)
+                    .getConstructor(getClass(), int.class).newInstance(this, playerNumber);
         } catch (InstantiationException
                 | InvocationTargetException
                 | NoSuchMethodException
                 | IllegalAccessException
                 | ClassNotFoundException e) {
-            this.game = new GameCore();
+            this.game = new DummyGame(this, playerNumber);
         }
-        this.connectedUsers = new ArrayList<>();
-        for (OtherUser user : connectedUsers) {
-            if (user.isNormalUser()) {
-                this.connectedUsers.add(new OtherUser(user.getUsername(), user.getHeadId(), user.getSubIP(), user.getPort()));
-            }
-        }
-        this.playerNumber = this.connectedUsers.size();
         this.readyPlayer = 0;
         this.lock = new ReentrantLock();
     }
@@ -57,7 +65,9 @@ public class GameServerCore extends Core {
     public void process(Model model, int replyIP, int replyPort) {
         lock.lock();
         try {
-            if (model instanceof GameReadyModel) {
+            if (model instanceof GameOperationModel) {
+                processGameOperation((GameOperationModel)model, replyIP);
+            } else if (model instanceof GameReadyModel) {
                 processGameReady(replyIP, replyPort);
             }
         } finally {
@@ -84,17 +94,31 @@ public class GameServerCore extends Core {
         }
     }
 
+    private void processGameOperation(GameOperationModel model, int ip) {
+        game.processInput(ipToNumber.get(ip), model.getOperation());
+    }
+
     private void gameStart() {
-        // TODO: fix this
-        for (int i = 0; i < 100; i++) {
-            for (OtherUser user : connectedUsers) {
-                send(new GameOperationModel(""+i), user.getSubIP(), user.getPort());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        game.startGame();
+    }
+
+    public void sendToPlayer(int player, String info) {
+        OtherUser user;
+        lock.lock();
+        try {
+            user = connectedUsers.get(player);
+        } finally {
+            lock.unlock();
+        }
+        send(new GameOperationModel(info), user.getSubIP(), user.getPort());
+    }
+
+    public String getName(int player) {
+        lock.lock();
+        try {
+            return connectedUsers.get(player).getUsername();
+        } finally {
+            lock.unlock();
         }
     }
 }

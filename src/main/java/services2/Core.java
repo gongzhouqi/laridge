@@ -26,7 +26,7 @@ public abstract class Core {
         sender = new Sender();
     }
 
-    public void send (Model model, int toIP, int toPort) {
+    protected void send (Model model, int toIP, int toPort) {
         Gson g = new Gson();
         JsonObject obj = new JsonObject();
         obj.addProperty(TYPE, model.getClass().getName());

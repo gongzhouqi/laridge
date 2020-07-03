@@ -1,11 +1,11 @@
-package games.chatRoom;
+package games.dummyGame;
 
 import games.GameCore;
 import services2.server.GameServerCore;
 
-public class MainGame extends GameCore {
+public class DummyGame extends GameCore {
 
-    public MainGame(GameServerCore server, int playerNumber) {
+    public DummyGame(GameServerCore server, int playerNumber) {
         super(server, playerNumber);
     }
 

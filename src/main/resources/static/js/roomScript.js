@@ -45,10 +45,10 @@ function broadcastRoom() {
 function createRoomLocal(roomName, gameId, isOwner) {
     fillRoom(roomName, gameId, isOwner);
     pageSwitch("room-page", "hall-page");
-    waitOnTheRoom();
+    waitOnTheRoom(gameId);
 }
 
-function waitOnTheRoom() {
+function waitOnTheRoom(gameId) {
     var sse = new EventSource("/waitRoomUpdate");
     sse.onmessage = function (evt) {
         var response = evt.data;
@@ -56,7 +56,7 @@ function waitOnTheRoom() {
             sse.close();
         } else if (response == "START") {
             sse.close();
-            processGameStart();
+            processGameStart(gameId);
         } else if (response == "KICK") {
             sse.close();
         } else {

@@ -4,11 +4,11 @@ function gameStart() {
     xmlHttp.send(null);
 }
 
-function processGameStart() {
+function processGameStart(gameId) {
     closeRoom();
     pageSwitch("game-page", "hall-page");
     showLoading();
-    loadGamePageLocal();
+    loadGamePageLocal(gameId);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", "/gameReady", false);
     xmlHttp.send(null);
@@ -17,6 +17,8 @@ function processGameStart() {
         waitOnTheGame();
     }
 }
+
+var gameInstance;
 
 function waitOnTheGame() {
     var sse = new EventSource("/waitGameUpdate");
@@ -27,19 +29,22 @@ function waitOnTheGame() {
         } else if (response == "GO") {
             hideLoading();
         } else {
-            processGameWait(response);
+            gameInstance.process(response);
         }
     };
 }
 
-function loadGamePageLocal() {
-    // TODO:
+function loadGamePageLocal(gameId) {
+    dynamicallyLoadScript(gameId);
 }
 
-function processGameWait(response) {
-    // TODO:
-    var e = document.getElementById("game-page");
-    var h = document.createElement("h6");
-    h.innerText = response;
-    e.appendChild(h);
+function dynamicallyLoadScript(gameId) {
+    var s = document.createElement("script");
+    var url = "../js/" + gameId + "/game.js";
+    s.src = url;
+    document.head.appendChild(s);
+    s.addEventListener('load', () => {
+        gameInstance = game;
+        gameInstance.startGame(document.getElementById("game-page"));
+    });
 }
