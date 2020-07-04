@@ -21,8 +21,12 @@ function processGameWait(response) {
         alert("Your turn");
         document.getElementById("number-guess").disabled = false;
         document.getElementById("guess-submit-button").disabled = false;
-    } else if (response.startsWith("WINNER")) {
-        alert(response);
+    } else if (response.startsWith("WIN")) {
+        alert(response.substring(3));
+        endGame();
+    } else if (response.startsWith("TUP")) {
+        alert(response.substring(3));
+        endGame();
     } else {
         var h = document.createElement("h6");
         h.innerText = response;

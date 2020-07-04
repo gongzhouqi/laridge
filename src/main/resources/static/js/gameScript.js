@@ -42,9 +42,18 @@ function dynamicallyLoadScript(gameId) {
     var s = document.createElement("script");
     var url = "../js/" + gameId + "/game.js";
     s.src = url;
+    s.id = "game-entity-script";
     document.head.appendChild(s);
     s.addEventListener('load', () => {
         gameInstance = game;
         gameInstance.startGame(document.getElementById("game-page"));
     });
 }
+
+function endGame() {
+    document.getElementById("game-page").innerHTML = "";
+    document.getElementById("game-entity-script").remove();
+    pageSwitch("hall-page", "game-page");
+}
+
+
