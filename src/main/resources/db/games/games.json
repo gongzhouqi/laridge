@@ -16,5 +16,11 @@
     "name": "看时间",
     "max": 8,
     "pkg": "showTime"
+  },
+  "1004": {
+    "id": "1004",
+    "name": "你画我猜",
+    "max": 8,
+    "pkg": "drawAndGuess"
   }
 }

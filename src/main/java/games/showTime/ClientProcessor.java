@@ -11,7 +11,6 @@ public class ClientProcessor extends GameProcessor {
 
     @Override
     public void processServerOperation(String operation) {
-        System.out.println(operation);
         client.showChange(operation);
     }
 }

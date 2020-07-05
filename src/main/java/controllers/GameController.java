@@ -41,4 +41,11 @@ public class GameController {
         User.getSingleton().inputToGame(input);
         return "OK";
     }
+
+    @GetMapping("/endGame")
+    @ResponseBody
+    public String gameEnd() {
+        User.getSingleton().endGame();
+        return "OK";
+    }
 }

@@ -53,9 +53,7 @@ public class Receiver {
                     }
                 }
                 socket.close();
-            } catch (IOException ignored) {
-                // TODO: consume this
-            }
+            } catch (IOException ignored) {}
         });
         listener.start();
     }

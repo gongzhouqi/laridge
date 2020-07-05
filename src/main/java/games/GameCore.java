@@ -31,7 +31,15 @@ public abstract class GameCore {
         this.onError = onError;
     }
 
-    public abstract void startGame();
+    public void startGame() {
+        if (onStart != null) {
+            Thread t = new Thread(onStart);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ignored) {}
+        }
+    }
 
     public final void completeGame() {
         if (onComplete != null) {

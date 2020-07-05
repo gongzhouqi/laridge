@@ -103,22 +103,11 @@ public class GameServerCore extends Core {
     }
 
     public void sendToPlayer(int player, String info) {
-        OtherUser user;
-        lock.lock();
-        try {
-            user = connectedUsers.get(player);
-        } finally {
-            lock.unlock();
-        }
+        OtherUser user = connectedUsers.get(player);
         send(new GameOperationModel(info), user.getSubIP(), user.getPort());
     }
 
     public String getName(int player) {
-        lock.lock();
-        try {
-            return connectedUsers.get(player).getUsername();
-        } finally {
-            lock.unlock();
-        }
+        return connectedUsers.get(player).getUsername();
     }
 }

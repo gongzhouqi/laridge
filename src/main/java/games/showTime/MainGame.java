@@ -7,19 +7,26 @@ public class MainGame extends GameCore {
 
     public MainGame(GameServerCore server, int playerNumber) {
         super(server, playerNumber);
-    }
-
-    @Override
-    public void startGame() {
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < this.playerNumber; j++) {
-                sendOutput(j, ""+i);
+        setOnStart(() -> {
+            for (int i = 0; i < 100; i++) {
+                for (int j = 0; j < this.playerNumber; j++) {
+                    sendOutput(j, ""+i);
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {}
             }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {}
-        }
+            for (int j = 0; j < this.playerNumber; j++) {
+                sendOutput(j, "QUIT");
+            }
+        });
     }
+//
+//    @Override
+//    public void startGame() {
+//    }
+
+
 
     @Override
     public void processInput(int player, String input) {

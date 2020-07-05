@@ -1,7 +1,6 @@
 package games;
 
 import services2.client.GameClientCore;
-import services2.server.GameServerCore;
 
 public abstract class GameProcessor {
 

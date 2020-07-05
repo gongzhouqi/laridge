@@ -1,0 +1,23 @@
+
+.game-page-bg {
+    padding: 100px;
+    background-color: gray;
+    height: 100%;
+    width: 100%;
+    box-sizing:border-box;
+}
+
+.canvas-container {
+    min-width: 900px;
+    max-width: 900px;
+    width: 900px;
+    min-height: 600px;
+    max-height: 600px;
+    height: 600px;
+    background-color: white;
+    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

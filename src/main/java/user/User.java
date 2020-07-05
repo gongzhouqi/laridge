@@ -190,6 +190,17 @@ public class User {
         gameClient = GameClientCore.guestGame(gameId, serverIP, serverPort);
     }
 
+    public void endGame() {
+        if (gameServer != null) {
+            gameServer.shutDown();
+            gameServer = null;
+        }
+        if (gameClient != null) {
+            gameClient.shutDown();
+            gameClient = null;
+        }
+    }
+
     public void frontEndGameReady(GameLoadModel model) {
         model.getLock().lock();
         try {
