@@ -150,7 +150,7 @@ function processGameWait(response) {
     } else
      if (response.startsWith("DRAW"))
       {
-        var newLine = JSON.parse(response.substring(4));
+        var newLine = JSON.parse(response.substring(4).replace(/%7D/g, "}").replace(/%7B/g, "{"));
         arr[newLine.order] = newLine;
         while (arr[counter] != null) {
             var toDraw = arr[counter];
