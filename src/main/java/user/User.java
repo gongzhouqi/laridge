@@ -2,9 +2,7 @@ package user;
 
 import constants.DBConstants;
 import models.GameLoadModel;
-import models.GameWaitModel;
 import models.RoomAccessModel;
-import models.RoomWaitModel;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import services2.client.GameClientCore;
 import services2.client.HallCore;

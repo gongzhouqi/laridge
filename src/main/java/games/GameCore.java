@@ -4,11 +4,11 @@ import services2.server.GameServerCore;
 
 public abstract class GameCore {
 
-    private Runnable onStart;
+    private GameRunnable onStart;
 
-    private Runnable onComplete;
+    private GameRunnable onComplete;
 
-    private Runnable onError;
+    private GameRunnable onError;
 
     protected final GameServerCore server;
 
@@ -19,45 +19,37 @@ public abstract class GameCore {
         this.playerNumber = playerNumber;
     }
 
-    public void setOnStart(Runnable onStart) {
+    public interface GameRunnable {
+        void run();
+    }
+
+    public final void setOnStart(GameRunnable onStart) {
         this.onStart = onStart;
     }
 
-    public void setOnComplete(Runnable onComplete) {
+    public final void setOnComplete(GameRunnable onComplete) {
         this.onComplete = onComplete;
     }
 
-    public void setOnError(Runnable onError) {
+    public final void setOnError(GameRunnable onError) {
         this.onError = onError;
     }
 
-    public void startGame() {
+    public final void startGame() {
         if (onStart != null) {
-            Thread t = new Thread(onStart);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ignored) {}
+            onStart.run();
         }
     }
 
     public final void completeGame() {
         if (onComplete != null) {
-            Thread t = new Thread(onComplete);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ignored) {}
+            onComplete.run();
         }
     }
 
     public final void handleError() {
         if (onError != null) {
-            Thread t = new Thread(onError);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ignored) {}
+            onError.run();
         }
     }
 

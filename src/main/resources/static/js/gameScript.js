@@ -67,4 +67,3 @@ function endGame() {
     pageSwitch("hall-page", "game-page");
 }
 
-

@@ -17,21 +17,19 @@ public class MainGame extends GameCore {
 
     public MainGame(GameServerCore server, int playerNumber) {
         super(server, playerNumber);
-    }
-
-    @Override
-    public void startGame() {
-        Random rand = new Random();
-        StringBuilder ans = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
-            String next = "" + rand.nextInt(10);
-            while (ans.toString().contains(next)) {
-                next = "" + rand.nextInt(10);
+        setOnStart(() -> {
+            Random rand = new Random();
+            StringBuilder ans = new StringBuilder();
+            for (int i = 0; i < 4; i++) {
+                String next = "" + rand.nextInt(10);
+                while (ans.toString().contains(next)) {
+                    next = "" + rand.nextInt(10);
+                }
+                ans.append(next);
             }
-            ans.append(next);
-        }
-        this.ans = ans.toString();
-        tellTurn();
+            this.ans = ans.toString();
+            tellTurn();
+        });
     }
 
     private void tellTurn() {

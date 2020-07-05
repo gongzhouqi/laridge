@@ -10,11 +10,6 @@ public class DummyGame extends GameCore {
     }
 
     @Override
-    public void startGame() {
-
-    }
-
-    @Override
     public void processInput(int player, String input) {
 
     }

@@ -19,13 +19,12 @@ var game = {
     }
 }
 
-
-
 var offLeft;
 var offTop;
 var pos = { x: 0, y: 0 };
 var ctx;
 var arr = [];
+var counter = 0;
 
 // var buffer;
 // var pointer = 0;
@@ -47,11 +46,28 @@ function init() {
     ctx.strokeStyle = '#c0392b';
 
     window.addEventListener('resize', calculateOffset);
+}
+
+function enableDraw() {
+    clearAll();
+    arr = [];
+    counter = 0;
     document.addEventListener('mousemove', draw);
     // document.addEventListener('mousedown', startDraw);
     document.addEventListener('mousedown', setPosition);
     document.addEventListener('mouseenter', setPosition);
     // document.addEventListener('mouseup', endDraw);
+}
+
+function disableDraw() {
+    clearAll();
+    arr = [];
+    counter = 0;
+    document.removeEventListener('mousemove', draw);
+    // document.removeEventListener('mousedown', startDraw);
+    document.removeEventListener('mousedown', setPosition);
+    document.removeEventListener('mouseenter', setPosition);
+    // document.removeEventListener('mouseup', endDraw);
 }
 
 function calculateOffset() {
@@ -100,10 +116,17 @@ function draw(e) {
     ctx.stroke();
 
     var line = {
+        order : counter,
         start : start,
         end : end
     }
+    counter++;
     arr.push(line);
+    var lineStr = JSON.stringify(line);
+    lineStr = lineStr.replace(/\{/g, "%7B").replace(/\}/g, "%7D");
+    inputToGame(
+        "DRAW"+
+        lineStr);
 }
 
 function clearAll() {
@@ -117,4 +140,31 @@ function redraw() {
         ctx.lineTo(l.end.x, l.end.y);
         ctx.stroke();
     });
+}
+
+function processGameWait(response) {
+    if (response.startsWith("ENABLE")) {
+        enableDraw();
+    } else if (response.startsWith("DISABLE")) {
+        disableDraw();
+    } else
+     if (response.startsWith("DRAW"))
+      {
+        var newLine = JSON.parse(response.substring(4));
+        arr[newLine.order] = newLine;
+        while (arr[counter] != null) {
+            var toDraw = arr[counter];
+            ctx.beginPath();
+            ctx.moveTo(toDraw.start.x, toDraw.start.y);
+            ctx.lineTo(toDraw.end.x, toDraw.end.y);
+            ctx.stroke();
+            counter++;
+        }
+    }
+}
+
+function inputToGame(input) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "/gameInput?input="+input, true);
+    xmlHttp.send(null);
 }

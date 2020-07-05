@@ -12,5 +12,4 @@ public abstract class GameProcessor {
 
     public abstract void processServerOperation(String operation);
 
-
 }
